@@ -16,20 +16,6 @@ module.exports = function(grunt) {
         reporterOutput: 'dist/jshint-report.html'
 	  },
     },
-	jshintextended: {
-    all: ['src/*.js'],
-    options: {
-        // This will generate the report in HTML format. 
-        reporter: require('jshint-html-reporter'),
-        // JS Validation rules are configured in .jshintrc file. 
-        jshintrc: '.jshintrc',
-        // This is the extra Object which needs to be set with 'jshint' options. 
-        jshintExtraOpts: {
-            errorReportDir: "dist/js_errors/",
-            removeTempFile: true
-			}
-		}
-	},
     concat: {
       build: {
         files: {
@@ -78,9 +64,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-plato');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
-  grunt.loadNpmTasks('grunt-jshint-extended');
 
   // Default task(s).
   grunt.registerTask('default', ['jshint', 'testem', 'clean', 'qunit-cov']);
-  grunt.registerTask('jenkins', ['clean', 'jshint','jshintextended', 'jasmine', 'plato', 'concat', 'uglify']);
+  grunt.registerTask('jenkins', ['clean', 'jshint', 'jasmine', 'plato', 'concat', 'uglify']);
 };
