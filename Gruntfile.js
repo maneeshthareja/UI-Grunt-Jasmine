@@ -5,9 +5,31 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     clean: ['dist/*.js', 'test/testem.tap'],
     jshint: {
-      all: ['src/*.js'],
-      options: grunt.file.readJSON('.jshintrc')
+	  all: {
+        src: [
+          'src/*.js'
+        ]
+      },
+      options: {
+		jshintrc:'.jshintrc',
+		reporter: require('jshint-html-reporter'),
+        reporterOutput: 'dist/jshint-report.html'
+	  },
     },
+	jshintextended: {
+    all: ['src/*.js'],
+    options: {
+        // This will generate the report in HTML format. 
+        reporter: require('jshint-html-reporter'),
+        // JS Validation rules are configured in .jshintrc file. 
+        jshintrc: '.jshintrc',
+        // This is the extra Object which needs to be set with 'jshint' options. 
+        jshintExtraOpts: {
+            errorReportDir: "dist/js_errors/",
+            removeTempFile: true
+			}
+		}
+	},
     concat: {
       build: {
         files: {
@@ -32,7 +54,10 @@ module.exports = function(grunt) {
     jasmine : {
       src : 'src/**/*.js',
       options : {
-        specs : 'spec/**/*.js'
+        specs : 'spec/**/*.js',
+		junit: {
+                path: 'dist/testresults'
+        }
       }
     },
     plato: {
@@ -47,15 +72,15 @@ module.exports = function(grunt) {
       }
     }
   });
-
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-plato');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
+  grunt.loadNpmTasks('grunt-jshint-extended');
 
   // Default task(s).
   grunt.registerTask('default', ['jshint', 'testem', 'clean', 'qunit-cov']);
-  grunt.registerTask('jenkins', ['jshint', 'clean', 'jasmine', 'plato', 'concat', 'uglify']);
+  grunt.registerTask('jenkins', ['clean', 'jshint','jshintextended', 'jasmine', 'plato', 'concat', 'uglify']);
 };
