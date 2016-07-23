@@ -13,7 +13,7 @@ module.exports = function(grunt) {
       options: {
 		jshintrc:'.jshintrc',
 		reporter: require('jshint-html-reporter'),
-        reporterOutput: 'dist/jshint-report.html'
+        reporterOutput: 'dist/jshintreport/index.html'
 	  },
     },
     concat: {
